@@ -11,15 +11,15 @@ enum event
     new_event
 };
 
-enum app
-{
-    BLYNK,
-    LINE,
-    Thingspeak,
-    Netpie,
-    IFTTT,
-    Mqtt
-};
+//enum app
+//{
+//    BLYNK,
+//    LINE,
+//    Thingspeak,
+//    Netpie,
+//    IFTTT,
+//    Mqtt
+//};
 
 class CORGI85
 {
