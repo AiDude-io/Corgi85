@@ -1,11 +1,11 @@
 
-#ifndef CORGI_LINE_MODULE_H
-#define CORGI_LINE_MODULE_H
+#ifndef CORGI85_LINE_MODULE_H
+#define CORGI85_LINE_MODULE_H
 
 #include "CorgiModule.h"
 
 
-class CorgiLine : public CorgiModule {
+class CORGI85_MODULE : public CorgiModule {
   public:
     void setup() {};
 

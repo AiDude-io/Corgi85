@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\kkmon\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:\\Users\\kkmon\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.1\\**",
+                "D:\\Product_Dev\\dev_esp8285_corgidude\\Corgi85\\src\\Corgi85\\Corgi85_blynk",
+                "D:\\Product_Dev\\dev_esp8285_corgidude\\Corgi85\\src\\Corgi85\\modules"
+            ],
+            "forcedInclude": [],
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}

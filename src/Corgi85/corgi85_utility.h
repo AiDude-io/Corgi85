@@ -28,10 +28,9 @@ class CORGI85
 {
 public:
     uint8_t receivedFlag;
-    uint8_t run(void);
+    // uint8_t run(void);
     uint8_t loop(void);
     CORGI85(HardwareSerial *Serial);
-    void registerCallback(String comm,Callback callback);
     event check_event();
     bool addModule(CorgiModule *module);
     void printModulesList();
@@ -50,6 +49,9 @@ private:
     uint8_t checkSum(uint8_t array[], uint8_t length);
     uint8_t buffer_avaliable(void);
     CorgiModulesMap moduleList;
+
+    String _raw ="";
+    String _data_="";
 };
 
 #endif
