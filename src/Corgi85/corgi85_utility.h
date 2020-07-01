@@ -2,8 +2,9 @@
 #include <vector>
 #ifndef CORGI85_UTILITY_H
 #define CORGI85_UTILITY_H
-
 #define MAXLENGTH 255
+
+#include "modules/CorgiModule.h"
 typedef void (*Callback) (std::vector<String>);
 enum event
 {
@@ -11,15 +12,17 @@ enum event
     new_event
 };
 
-//enum app
-//{
-//    BLYNK,
-//    LINE,
-//    Thingspeak,
-//    Netpie,
-//    IFTTT,
-//    Mqtt
-//};
+enum app
+{
+    BLYNK,
+    LINE,
+    Thingspeak,
+    Netpie,
+    IFTTT,
+    Mqtt
+};
+
+typedef std::map<const char*, CorgiModule*> CorgiModulesMap;
 
 class CORGI85
 {
@@ -30,12 +33,14 @@ public:
     CORGI85(HardwareSerial *Serial);
     void registerCallback(String comm,Callback callback);
     event check_event();
+    bool addModule(CorgiModule *module);
+    void printModulesList();
 
 private:
     Stream *corgi_serial;
-    
+
     std::map<String, Callback> registered_callback;
-    
+
     uint8_t pointer_head = 0;
     uint8_t pointer_tail = 0;
 
@@ -44,6 +49,7 @@ private:
 
     uint8_t checkSum(uint8_t array[], uint8_t length);
     uint8_t buffer_avaliable(void);
+    CorgiModulesMap moduleList;
 };
 
 #endif

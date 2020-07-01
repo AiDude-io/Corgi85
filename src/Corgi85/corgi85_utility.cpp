@@ -18,8 +18,25 @@ uint8_t CORGI85::checkSum(uint8_t array[], uint8_t length)
   return sum;
 }
 
+void CORGI85::printModulesList() {
+  std::map<const char*, CorgiModule*>::iterator it = this->moduleList.begin();
+  int i = 0;
+  while (it != this->moduleList.end())
+  {
+      const char* word = it->first;
+      Serial.printf("[%d] = %s\r\n", i, word);
+      i++;
+      it++;
+  }
+}
+
 void CORGI85::registerCallback(String comm,Callback callbackPtr){
   registered_callback[comm] = callbackPtr;
+}
+
+bool CORGI85::addModule(CorgiModule *module) {
+  this->moduleList[module->name()] = module;
+  return true;
 }
 
 uint8_t CORGI85::loop(void)
@@ -38,8 +55,33 @@ uint8_t CORGI85::loop(void)
   return 1;
 }
 
+
+
 uint8_t CORGI85::run(void) //new data was recevied
 {
+  std::map<const char*, CorgiModule*>::iterator it = this->moduleList.begin();
+  int i = 0;
+  while (it != this->moduleList.end())
+  {
+      const char* word = it->first;
+      CorgiModule *module = it->second;
+      // Serial.printf("[%d] = %s\r\n", i, word);
+      module->loop();
+      i++;
+      it++;
+  }
+
+  while (corgi_serial->available()) {
+    String s = corgi_serial->readStringUntil('\n');
+    if (s.indexOf("IFTTT,") != -1) {
+      moduleList["IFTTT"]->cmd(s);
+    }
+    else if (s.indexOf("LINE,") != -1) {
+      moduleList["LINE"]->cmd(s);
+    }
+  }
+
+  return 0;
 
   while ((corgi_serial->available()) > 0 && (buffer_avaliable() < 255))
   {
