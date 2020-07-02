@@ -30,15 +30,15 @@ class CorgiLine : public CorgiModule {
     };
     void cmd(String cmd) {
       Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str() );
+      cmd.trim();
       String func = getValuetong(cmd,',',1);
       if(func == "setToken"){
         String setToken = getValuetong(cmd,',',2);
-        setToken.trim();
         LINE.setToken(setToken);
         Serial.println(setToken);
       }else if (func == "notify"){
         String notify = getValuetong(cmd,',',2);
-        notify.trim();
+        // notify.trim();
         Serial.println(LINE.notify(notify));
       }
 
