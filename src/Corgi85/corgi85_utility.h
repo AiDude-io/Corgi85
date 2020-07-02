@@ -6,7 +6,11 @@
 
 #include "modules/CorgiModule.h"
 typedef void (*Callback) (std::vector<String>);
-
+enum Receive_mode
+{
+    serial_string,
+    serial_raw
+};
 
 typedef std::map<const char*, CorgiModule*> CorgiModulesMap;
 
@@ -17,7 +21,6 @@ public:
     // uint8_t run(void);
     uint8_t loop(void);
     CORGI85(HardwareSerial *Serial);
-    event check_event();
     bool addModule(CorgiModule *module);
     void printModulesList();
 
@@ -38,6 +41,7 @@ private:
 
     String _raw ="";
     String _data_="";
+    Receive_mode current_mode;
 };
 
 #endif
