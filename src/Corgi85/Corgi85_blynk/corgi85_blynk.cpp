@@ -2,39 +2,41 @@
 #include <Arduino.h>
 #include "corgi85_blynk.h"
 
-
 void DoBlynk(std::vector<String> data)
 {
-  int func_no = String(data[0]).toInt();
+    int func_no = String(data[0]).toInt();
 
-  switch (func_no)
-  {
-  case 0: // set auth
-  {
-    Blynk.config(String(data[1]).c_str());
-  }
-  break;
+    switch (func_no)
+    {
+    case 0: // set auth
+    {
+        Blynk.config(String(data[1]).c_str());
+    }
+    break;
 
-  case 1: // set host
-  {
-host = 
-  }
-  case 2: // set port
-  {
-    port  = String(data[1]).toInt();
-    String value = String(data[1]);
-    Blynk.virtualWrite(vir_pin, value);
-  }
-  case 3:
-  {
-    uint8_t vir_pin = String(data[1]).toInt();
-    float value = String(data[1]).toFloat();
-    Blynk.virtualWrite(vir_pin, value);
-  }
-  break;
-  }
+    case 1: // set host
+    {
+        Blynk.config(String(data[1]).c_str());
+        uint8_t vir_pin = String(data[1]).toInt();
+        int value = String(data[1]).toInt();
+        Blynk.virtualWrite(vir_pin, value);
+    }
+    case 2: // set port
+    {
+        port = String(data[1]).toInt();
+        String value = String(data[1]);
+        Blynk.virtualWrite(vir_pin, value);
+    }
+    case 3:
+    {
+        uint8_t vir_pin = String(data[1]).toInt();
+        float value = String(data[1]).toFloat();
+        Blynk.virtualWrite(vir_pin, value);
+    }
+    break;
+    }
 
-  //String x = String(static_cast<char *>(args));
+    //String x = String(static_cast<char *>(args));
 }
 
 uint8_t CORGI85_BLINK::Blynk_virtualWrite(uint8_t vir_pin, int16_t value)
