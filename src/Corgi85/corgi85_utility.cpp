@@ -68,11 +68,12 @@ uint8_t CORGI85::loop(void) //new data was recevied
     // i++;
     it++;
   }
+
   while (corgi_serial->available())
   {
     char s = corgi_serial->read();
     _raw += s;
-    if (s == '\n')
+    if (s == '\r')
     {
       std::map<const char *, CorgiModule *>::iterator it = this->moduleList.begin();
       while (it != this->moduleList.end())

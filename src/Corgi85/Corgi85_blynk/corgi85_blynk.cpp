@@ -17,7 +17,10 @@ void DoBlynk(std::vector<String> data)
 
   case 1: // set host
   {
-host = 
+    Blynk.config(String(data[1]).c_str());
+    uint8_t vir_pin = String(data[1]).toInt();
+    int value = String(data[1]).toInt();
+    Blynk.virtualWrite(vir_pin, value);
   }
   case 2: // set port
   {

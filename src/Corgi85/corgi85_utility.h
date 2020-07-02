@@ -6,21 +6,7 @@
 
 #include "modules/CorgiModule.h"
 typedef void (*Callback) (std::vector<String>);
-enum event
-{
-    emtry,
-    new_event
-};
 
-enum app
-{
-    BLYNK,
-    LINE,
-    Thingspeak,
-    Netpie,
-    IFTTT,
-    Mqtt
-};
 
 typedef std::map<const char*, CorgiModule*> CorgiModulesMap;
 
