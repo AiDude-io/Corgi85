@@ -38,8 +38,19 @@ class CorgiLine : public CorgiModule {
         Serial.println(setToken);
       }else if (func == "notify"){
         String notify = getValuetong(cmd,',',2);
-        // notify.trim();
         Serial.println(LINE.notify(notify));
+      }else if (func == "notifySticker"){
+        int PackageIDn = getValuetong(cmd,',',2).toInt();
+        int StickerIDn = getValuetong(cmd,',',3).toInt();
+        Serial.println(LINE.notifySticker(PackageIDn,StickerIDn));
+      }else if (func == "notifySticker_text"){
+        String textn = getValuetong(cmd,',',2);
+        int PackageIDn = getValuetong(cmd,',',3).toInt();
+        int StickerIDn = getValuetong(cmd,',',4).toInt();
+        Serial.println(LINE.notifySticker(textn,PackageIDn,StickerIDn));
+      }else if (func == "notifyPicture"){
+        
+        Serial.println(LINE.notifyPicture());
       }
 
     };
