@@ -37,49 +37,54 @@ public:
       Serial.printf("fn = %s\r\nCMD=%s\t%s\r\n", fn.c_str(), v1.c_str(), v2.c_str());
       switch (fn.toInt())
       {
+
       case 0: // set auth
       {
-        corgi85_blynk.auth = String(v1);
         Blynk.config(corgi85_blynk.auth.c_str());
         corgi85_blynk.initial = 1;
       }
       break;
-      case 1: // set host
+      case 1: // set auth
+      {
+        corgi85_blynk.auth = String(v1);
+      }
+      break;
+      case 2: // set host
       {
         corgi85_blynk.host = String(v1);
       }
       break;
-      case 2: // set port
+      case 3: // set port
       {
         corgi85_blynk.port = v1.toInt();
       }
       break;
-      case 3: // write long
+      case 4: // write long
       {
         uint8_t vir_pin = v1.toInt();
         float value = v2.toInt();
         Blynk.virtualWrite(vir_pin, value);
       }
       break;
-      case 4: // write float
+      case 5: // write float
       {
         uint8_t vir_pin = v1.toInt();
         float value = v2.toFloat();
         Blynk.virtualWrite(vir_pin, value);
       }
       break;
-      case 5: // write char
+      case 6: // write char
       {
         uint8_t vir_pin = v1.toInt();
         Blynk.virtualWrite(vir_pin, v2.c_str());
       }
       break;
-      case 6: // write noti
+      case 7: // write noti
       {
         Blynk.notify(v1.c_str());
       }
 
-      case 7: // read virtual pin noti
+      case 8: // read virtual pin noti
       {
         Serial.print("BLYNK,V");
         Serial.print(v1.toInt());
