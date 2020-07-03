@@ -38,7 +38,6 @@ class CORGI85():
         self.uart.write(auth)
         self.uart.write("\r")
 
-
     def BLYNK_Set_host(host):
         self.uart.write("BLYNK,2,")
         self.uart.write(host)
@@ -62,8 +61,6 @@ class CORGI85():
         self.uart.write(",")
         self.uart.write(value)
         self.uart.write(",\r")
-
-
 
     def BLYNK_write_char(VPIN, value):
         self.uart.write("BLYNK,6,")

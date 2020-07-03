@@ -38,7 +38,7 @@ public:
       switch (fn.toInt())
       {
 
-      case 0: // set auth
+      case 0: // set config
       {
         Blynk.config(corgi85_blynk.auth.c_str());
         corgi85_blynk.initial = 1;
@@ -59,7 +59,7 @@ public:
         corgi85_blynk.port = v1.toInt();
       }
       break;
-      case 4: // write long
+      case 4: // write int
       {
         uint8_t vir_pin = v1.toInt();
         float value = v2.toInt();
