@@ -1,18 +1,5 @@
-import image
-import time
 from fpioa_manager import fm, board_info
-
-
-while True:
-    tmp = uart.read()
-
-    uart.write("AT+UART_CUR=921600,8,1,0,0\n")
-    uart.write("IFTT,SETUP-1,2,3,4,5,6\n")
-    print("IFTT,SETUP-1,2,3,4,5,6\n")
-    print("IFTT,CMD-1,1,2,3,4,5,6\n")
-    print("IFTT,CMD-2,1,2,3,4,5,6\n")
-    print("LINE,CMD-1\n")
-    time.sleep(1)
+from machine import UART
 
 
 class CORGI85():
@@ -21,63 +8,65 @@ class CORGI85():
         try:
             fm.register(board_info.WIFI_RX, fm.fpioa.UART2_TX)
             fm.register(board_info.WIFI_TX, fm.fpioa.UART2_RX)
-            self.uart = UART(UART.UART2, 115200,
-                             timeout=1000, read_buf_len=1024)
-
-            except:
-                print("Unable to init UART")
+            self.uart = UART(UART.UART2, 115200, 8, None, 1,
+                             timeout=1000, read_buf_len=4096)
+            print("Init CORGI85")
+        except:
+            print("Unable to init UART")
 
     def deinit(self):
+        self.uart.deinit()
         del self.uart
 
-    def BLYNK_config():
+    def BLYNK_config(self):
         self.uart.write("BLYNK,0,\r")
 
-    def BLYNK_Set_auth(auth):
+    def BLYNK_Set_auth(self, auth):
         self.uart.write("BLYNK,1,")
         self.uart.write(auth)
-        self.uart.write("\r")
+        self.uart.write(",\r")
 
-    def BLYNK_Set_host(host):
+    def BLYNK_Set_host(self, host):
         self.uart.write("BLYNK,2,")
         self.uart.write(host)
-        self.uart.write("\r")
+        self.uart.write(",\r")
 
-    def BLYNK_Set_port(port):
+    def BLYNK_Set_port(self, port):
         self.uart.write("BLYNK,3,")
-        self.uart.write(port)
-        self.uart.write("\r")
+        self.uart.write(str(port))
+        self.uart.write(",\r")
 
-    def BLYNK_write_int(VPIN, value):
+    def BLYNK_write_int(self, VPIN, value):
         self.uart.write("BLYNK,4,")
-        self.uart.write(VPIN)
+        self.uart.write(str(VPIN))
         self.uart.write(",")
-        self.uart.write(value)
+        self.uart.write(str(value))
         self.uart.write(",\r")
 
-    def BLYNK_write_float(VPIN, value):
+    def BLYNK_write_float(self, VPIN, value):
         self.uart.write("BLYNK,5,")
-        self.uart.write(VPIN)
+        self.uart.write(str(VPIN))
         self.uart.write(",")
-        self.uart.write(value)
+        self.uart.write(str(value))
         self.uart.write(",\r")
 
-    def BLYNK_write_char(VPIN, value):
+    def BLYNK_write_char(self, VPIN, value):
         self.uart.write("BLYNK,6,")
-        self.uart.write(VPIN)
+        self.uart.write(str(VPIN))
         self.uart.write(",")
-        self.uart.write(value)
+        self.uart.write(str(value))
         self.uart.write(",\r")
 
-    def BLYNK_noti(value):
+    def BLYNK_noti(self, value):
         self.uart.write("BLYNK,7,")
-        self.uart.write(value)
+        self.uart.write(str(value))
         self.uart.write(",\r")
 
-    def BLYNK_read(VPIN):
-        self.uart.
+    def BLYNK_read(self, VPIN):
+
+        flush = self.uart.read(self.uart.any())
         self.uart.write("BLYNK,8,")
-        self.uart.write(VPIN)
+        self.uart.write(str(VPIN))
         self.uart.write(",\r")
 
         return 0

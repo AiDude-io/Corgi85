@@ -16,7 +16,7 @@ CORGI85 corgi85(&Serial);
 
 void setup()
 {
-  delay(2000);
+  // delay(2000);
   Serial.begin(115200);
 
   WiFiManager wifiManager;
@@ -34,6 +34,7 @@ void setup()
 
   corgi85.setup();
   // corgi85.printModulesList();
+  Serial.flush();
 }
 
 void loop()
