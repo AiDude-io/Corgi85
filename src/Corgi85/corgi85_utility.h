@@ -5,33 +5,23 @@
 #define MAXLENGTH 255
 
 #include "modules/CorgiModule.h"
-typedef void (*Callback) (std::vector<String>);
-enum event
+typedef void (*Callback)(std::vector<String>);
+enum Receive_mode
 {
-    emtry,
-    new_event
+    serial_string,
+    serial_raw
 };
 
-enum app
-{
-    BLYNK,
-    LINE,
-    Thingspeak,
-    Netpie,
-    IFTTT,
-    Mqtt
-};
-
-typedef std::map<const char*, CorgiModule*> CorgiModulesMap;
+typedef std::map<const char *, CorgiModule *> CorgiModulesMap;
 
 class CORGI85
 {
 public:
     uint8_t receivedFlag;
     // uint8_t run(void);
+    uint8_t setup(void);
     uint8_t loop(void);
     CORGI85(HardwareSerial *Serial);
-    event check_event();
     bool addModule(CorgiModule *module);
     void printModulesList();
 
@@ -50,8 +40,9 @@ private:
     uint8_t buffer_avaliable(void);
     CorgiModulesMap moduleList;
 
-    String _raw ="";
-    String _data_="";
+    String _raw = "";
+    String _data_ = "";
+    Receive_mode current_mode = serial_string;
 };
 
 #endif

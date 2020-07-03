@@ -73,8 +73,7 @@ public:
       break;
       case 6: // write noti
       {
-        uint8_t vir_pin = v1.toInt();
-        Blynk.notify(v2.c_str());
+        Blynk.notify(v1.c_str());
       }
 
       break;
