@@ -9,6 +9,7 @@
 #include "modules/CorgiIFTTT.hpp"
 #include "modules/CorgiLine.hpp"
 #include "modules/Corgi85_blynk.hpp"
+#include "modules/Corgi85_thingspeak.hpp"
 #include <vector>
 
 CORGI85 corgi85(&Serial);
@@ -29,6 +30,7 @@ void setup()
   corgi85.addModule(new CorgiIFTTT());
   corgi85.addModule(new CorgiLine());
   corgi85.addModule(new Corgi85_blynk());
+  corgi85.addModule(new CorgiThingSpeak());
 }
 
 void loop()
