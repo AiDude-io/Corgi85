@@ -92,6 +92,23 @@ uint8_t CORGI85::loop(void) //new data was recevied
   return 0;
 }
 
+uint8_t CORGI85::setup(void) //new data was recevied
+{
+  std::map<const char *, CorgiModule *>::iterator it = this->moduleList.begin();
+  int i = 0;
+  while (it != this->moduleList.end())
+  {
+    CorgiModule *module = it->second;
+    module->setup();
+
+    // const char *word = it->first;
+    // Serial.printf("[%d] = %s\r\n", i, word);
+    // i++;
+    it++;
+  }
+  return 0;
+}
+
 uint8_t CORGI85::buffer_avaliable(void) //new data was recevied
 {
   uint8_t length = 0;

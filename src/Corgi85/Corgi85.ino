@@ -29,6 +29,8 @@ void setup()
   corgi85.addModule(new CorgiIFTTT());
   corgi85.addModule(new CorgiLine());
   corgi85.addModule(new Corgi85_blynk());
+
+  corgi85.setup();
 }
 
 void loop()
