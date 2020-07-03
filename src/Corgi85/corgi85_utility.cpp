@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "corgi85_utility.h"
+#include "StringSplitter.h" //https://github.com/aharshac/StringSplitter
 
 CORGI85::CORGI85(HardwareSerial *Serial) //read the uart signal by hardware uart,such as D0
 {
@@ -71,22 +72,52 @@ uint8_t CORGI85::loop(void) //new data was recevied
 
   while (corgi_serial->available())
   {
-    char s = corgi_serial->read();
-    _raw += s;
-    if (s == '\r')
+
+    switch (current_mode)
     {
-      std::map<const char *, CorgiModule *>::iterator it = this->moduleList.begin();
-      while (it != this->moduleList.end())
+    case serial_string: // command // module name -------------\r
+    {
+      char s = corgi_serial->read();
+      _data += s;
+      if (s == '\r')
       {
-        String word = it->first;
-        if (_raw.indexOf(word) == 0)
+        std::map<const char *, CorgiModule *>::iterator it = this->moduleList.begin();
+        while (it != this->moduleList.end())
         {
-          CorgiModule *module = it->second;
-          module->cmd(_raw);
+          String word = it->first;
+          if (_data.indexOf(word) == 0)
+          {
+            module = it->second;
+            module->cmd(_data);
+          }
+          it++;
         }
-        it++;
+
+        // command // module name , "RAW_DATA", data size,\r-----------------data------------------
+        if (_data.indexOf("RAW_DATA") != -1)
+        {
+          StringSplitter *splitter = new StringSplitter(_data, ',', 3);
+          data_length = (int32_t)String(splitter->getItemAtIndex(2)).toInt();
+          current_mode = serial_raw;
+          delete splitter;
+        }
+        _data = "";
+      }
+    }
+    break;
+
+    case serial_raw:
+    {
+      _raw += corgi_serial->read();
+      data_length--;
+      if (data_length <= 0)
+      {
+        module->cmd(_raw);
+        current_mode = serial_string;
       }
       _raw = "";
+    }
+    break;
     }
   }
   return 0;
@@ -100,10 +131,6 @@ uint8_t CORGI85::setup(void) //new data was recevied
   {
     CorgiModule *module = it->second;
     module->setup();
-
-    // const char *word = it->first;
-    // Serial.printf("[%d] = %s\r\n", i, word);
-    // i++;
     it++;
   }
   return 0;

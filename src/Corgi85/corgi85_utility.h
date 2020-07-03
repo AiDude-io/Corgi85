@@ -41,8 +41,10 @@ private:
     CorgiModulesMap moduleList;
 
     String _raw = "";
-    String _data_ = "";
+    String _data = "";
     Receive_mode current_mode = serial_string;
+    int32_t data_length = 0;
+    CorgiModule *module;
 };
 
 #endif

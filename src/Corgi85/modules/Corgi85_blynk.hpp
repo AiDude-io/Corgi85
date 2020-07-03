@@ -80,6 +80,9 @@ public:
       }
     }
     Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
+
+
+    delete splitter;
   };
 
   const char *name()

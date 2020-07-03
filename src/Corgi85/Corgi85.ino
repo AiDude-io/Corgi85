@@ -31,12 +31,13 @@ void setup()
   corgi85.addModule(new CorgiLine());
   corgi85.addModule(new Corgi85_blynk());
   corgi85.addModule(new CorgiThingSpeak());
+
   corgi85.setup();
+  // corgi85.printModulesList();
 }
 
 void loop()
 {
   corgi85.loop();
-  // corgi85.printModulesList();
   delay(20);
 }
