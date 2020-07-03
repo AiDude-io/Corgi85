@@ -50,7 +50,7 @@ class CorgiLine : public CorgiModule {
         Serial.println(LINE.notifySticker(textn,PackageIDn,StickerIDn));
       }else if (func == "notifyPicture"){
         
-        Serial.println(LINE.notifyPicture());
+        // Serial.println(LINE.notifyPicture());
       }
 
     };
