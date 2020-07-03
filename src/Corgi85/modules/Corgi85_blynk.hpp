@@ -6,8 +6,6 @@
 #include "StringSplitter.h" //https://github.com/aharshac/StringSplitter
 #include "../Corgi85_blynk/corgi85_blynk.h"
 
-CORGI85_BLINK corgi85_blynk;
-
 class Corgi85_blynk : public CorgiModule
 {
 public:
@@ -19,6 +17,11 @@ public:
   {
     if (corgi85_blynk.initial)
       Blynk.run();
+    if (corgi85_blynk.event)
+    {
+      corgi85_blynk.event = 0;
+      Serial.print("BLYNK,EVENT\n\r");
+    }
   };
 
   void cmd(String cmd)
@@ -76,10 +79,21 @@ public:
         Blynk.notify(v1.c_str());
       }
 
+      case 7: // read virtual pin noti
+      {
+        Serial.print("BLYNK,V");
+        Serial.print(v1.toInt());
+        Serial.print(",");
+        Serial.print(corgi85_blynk.virtual_pin[v1.toInt()]);
+        Serial.print(",\r");
+      }
+
       break;
       }
     }
     Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
+
+    delete splitter;
   };
 
   const char *name()
