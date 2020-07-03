@@ -10,52 +10,68 @@ class CorgiThingSpeak : public CorgiModule
 {
 public:
   void setup(){
-      // ts_init();
+
   };
 
   void loop(){
 
   };
 
+  String strTrim(String data, char separator, int index)
+  {
+    int found = 0;
+    int strIndex[] = {0, -1};
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++)
+    {
+      if (data.charAt(i) == separator || i == maxIndex)
+      {
+        found++;
+        strIndex[0] = strIndex[1] + 1;
+        strIndex[1] = (i == maxIndex) ? i + 1 : i;
+      }
+    }
+
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+  };
+
   void cmd(String cmd)
   {
     Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
 
-    ts_init();
+    cmd.trim();
 
-    StringSplitter *splitter = new StringSplitter(cmd, ',', 4);
-    int itemCount = splitter->getItemCount();
+    String fn = strTrim(cmd, ',', 1);
 
-    if (itemCount == 3)
+    if (fn == "init")
     {
-      uint8_t fn = String(splitter->getItemAtIndex(1)).toInt();
-      String first_field = String(splitter->getItemAtIndex(2));
-      String second_field = String(splitter->getItemAtIndex(3));
-
-      switch (fn)
-      {
-      case 0:
-      {
-        char *api_key;
-        unsigned int size = 20;
-        first_field.toCharArray(api_key, size);
-
-        unsigned long channel_id = (unsigned long)second_field.toInt();
-
-        ts_account(api_key, channel_id);
-      }
-      break;
-      case 1:
-      {
-        ts_write_field((uint8_t)first_field.toInt(), (uint8_t)second_field.toInt());
-      }
-      break;
-
-      default:
-        break;
-      }
+      Serial.println(">>> process init ...");
+      ts_init();
     }
-  };
+    else if (fn == "account_setup")
+    {
+      Serial.println(">>> process account_setup ...");
+      String cmd_api_key = strTrim(cmd, ',', 2);
+      String cmd_channel_id = strTrim(cmd, ',', 3);
+
+      char *api_key;
+      unsigned int size = 20;
+      cmd_api_key.toCharArray(api_key, size);
+
+      unsigned long channel_id = (unsigned long)cmd_channel_id.toInt();
+
+      ts_account(api_key, channel_id);
+    }
+    else if (fn == "write_field")
+    {
+      Serial.println(">>> process write_field ...");
+      String cmd_field = strTrim(cmd, ',', 2);
+      String cmd_value = strTrim(cmd, ',', 3);
+
+      ts_write_field((uint8_t)cmd_field.toInt(), (uint8_t)cmd_value.toInt());
+    }
+  }
 
   const char *name()
   {
