@@ -15,8 +15,16 @@ public:
 
   void loop()
   {
-    if (corgi85_blynk.initial)
+    if (corgi85_blynk.initial > 0)
+    {
       Blynk.run();
+      if (corgi85_blynk.initial == 1)
+      {
+        corgi85_blynk.initial++;
+        Blynk.syncAll();
+      }
+    }
+
     if (corgi85_blynk.event)
     {
       corgi85_blynk.event = 0;
@@ -34,7 +42,9 @@ public:
       String fn = String(splitter->getItemAtIndex(1));
       String v1 = String(splitter->getItemAtIndex(2));
       String v2 = String(splitter->getItemAtIndex(3));
-      Serial.printf("fn = %s\r\nCMD=%s\t%s\r\n", fn.c_str(), v1.c_str(), v2.c_str());
+
+      // Serial.printf("fn = %s\r\nCMD=%s\t%s\r\n", fn.c_str(), v1.c_str(), v2.c_str());
+
       switch (fn.toInt())
       {
 
@@ -86,17 +96,18 @@ public:
 
       case 8: // read virtual pin noti
       {
-        Serial.print("BLYNK,V");
-        Serial.print(v1.toInt());
-        Serial.print(",");
+        // Serial.print("BLYNK,V");
+        // Serial.print(v1.toInt());
+        // Serial.print(",");
         Serial.print(corgi85_blynk.virtual_pin[v1.toInt()]);
-        Serial.print(",\r");
+        Serial.print("\r");
       }
 
       break;
       }
     }
-    Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
+
+    // Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
 
     delete splitter;
   };

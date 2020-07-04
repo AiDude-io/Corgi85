@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "corgi85_utility.h"
 #include "StringSplitter.h" //https://github.com/aharshac/StringSplitter
+#include <ESP8266WiFi.h>
 
 CORGI85::CORGI85(HardwareSerial *Serial) //read the uart signal by hardware uart,such as D0
 {
@@ -100,6 +101,18 @@ uint8_t CORGI85::loop(void) //new data was recevied
           data_length = (int32_t)String(splitter->getItemAtIndex(2)).toInt();
           current_mode = serial_raw;
           delete splitter;
+        }
+
+        if (_data.indexOf("WIFI_CHECK") == 0)
+        {
+          if (WiFi.status() == WL_CONNECTED)
+          {
+            Serial.print("1\r");
+          }
+          else
+          {
+            Serial.print("0\r");
+          }
         }
         _data = "";
       }

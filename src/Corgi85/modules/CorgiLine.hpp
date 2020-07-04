@@ -5,7 +5,7 @@
 #include "CorgiModule.h"
 #include <TridentTD_LineNotify.h>
 #include "StringSplitter.h"
-
+#include <ESP8266WiFi.h> 
 class CorgiLine : public CorgiModule {
   public:
     void setup() {};

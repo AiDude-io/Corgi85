@@ -1,10 +1,4 @@
-# Hello World Example
-#
-# Welcome to the MaixPy IDE!
-# 1. Conenct board to computer
-# 2. Select board at the top of MaixPy IDE: `tools->Select Board`
-# 3. Click the connect buttion below to connect board
-# 4. Click on the green run arrow button below to run the script!
+
 
 import sensor, image, time, lcd
 from fpioa_manager import fm, board_info
@@ -24,6 +18,16 @@ class CORGI85():
     def deinit(self):
         self.uart.deinit()
         del self.uart
+
+    def wifi_check(self):
+
+        data = self.uart.read()
+        self.uart.write("\rWIFI_CHECK,\r")
+        time.sleep_ms(100)
+        data = self.uart.read()
+
+        return int(data[0])
+
 
     def BLYNK_config(self):
         self.uart.write("\rBLYNK,0,\r")
@@ -75,6 +79,7 @@ class CORGI85():
         self.uart.write("\rBLYNK,8,")
         self.uart.write(str(VPIN))
         self.uart.write(",\r")
+        time.sleep_ms(100)
         data = self.uart.read()
 
         return data
@@ -83,22 +88,27 @@ time.sleep(1)
 
 corgi85 = CORGI85()
 
-#corgi85.BLYNK_Set_auth("16bfRLyckrO9iRtRLfsVqF9aCnPkBdVK")
+corgi85.BLYNK_Set_auth("16bfRLyckrO9iRtRLfsVqF9aCnPkBdVK")
+corgi85.BLYNK_Set_host("blynk-cloud.com")
+corgi85.BLYNK_Set_port(8080)
+
 corgi85.BLYNK_config()
 
 count = 0
 
 while(True):
-    count = count + 1
 
-    corgi85.BLYNK_noti("Hello CorgiDude")
-    time.sleep(1)
+    if(corgi85.wifi_check()):
+        count = count + 1
+        corgi85.BLYNK_noti("Hello CorgiDude")
+        corgi85.BLYNK_write_int(5, count)
+        print(corgi85.BLYNK_read(6))
 
-    corgi85.BLYNK_write_int(5, count)
-    time.sleep(1)
+    else :
+        print("WIFI Not Connected")
 
-    print(corgi85.BLYNK_read(5))
-    time.sleep(1)
+
+    time.sleep(5)
 
 
 

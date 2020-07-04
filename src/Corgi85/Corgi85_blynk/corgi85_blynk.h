@@ -11,7 +11,7 @@
 class CORGI85_BLINK
 {
 public:
-    String auth = "16bfRLyckrO9iRtRLfsVqF9aCnPkBdVK";
+    String auth = "";
     String host = "blynk-cloud.com";
     unsigned int port = 8080;
     uint8_t initial = 0;
