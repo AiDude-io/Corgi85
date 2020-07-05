@@ -94,11 +94,11 @@ uint8_t CORGI85::loop(void) //new data was recevied
           it++;
         }
 
-        // command // module name , "RAW_DATA", data size,\r-----------------data------------------
+        // command // module name, fn , "RAW_DATA", data size,\r-----------------data------------------
         if (_data.indexOf("RAW_DATA") != -1)
         {
-          StringSplitter *splitter = new StringSplitter(_data, ',', 3);
-          data_length = (int32_t)String(splitter->getItemAtIndex(2)).toInt();
+          StringSplitter *splitter = new StringSplitter(_data, ',', 4);
+          data_length = (int32_t)String(splitter->getItemAtIndex(3)).toInt();
           current_mode = serial_raw;
           delete splitter;
         }
@@ -125,7 +125,7 @@ uint8_t CORGI85::loop(void) //new data was recevied
       data_length--;
       if (data_length <= 0)
       {
-        module->cmd(_raw);
+        module->raw(_raw, data_length);
         current_mode = serial_string;
       }
       _raw = "";
