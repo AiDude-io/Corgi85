@@ -67,7 +67,7 @@ public:
     }
   };
 
-  void raw(String s, uint16_t data_length)
+  void raw(String s, uint32_t data_length)
   {
     size_t image_size = data_length;
     uint8_t *image_data = (uint8_t *)s.c_str();

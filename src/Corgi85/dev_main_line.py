@@ -56,16 +56,31 @@ class CORGI85():
         self.uart.write(",\r")
 
     def LINE_notifyPicture(self, img, text):
-
-        img_size = 0
+        img.compress([quality=80])
+        img_size = img.size()
         self.uart.write("\rLINE,notifyPicture,RAW_DATA,")
         self.uart.write(str(img_size))
         self.uart.write(",")
         self.uart.write(str(text))
         self.uart.write(",\r")
-        self.uart.write(img)
+        self.uart.write(img.to_bytes())
 
         
+
+
+#setup camera
+sensor.reset()
+sensor.set_pixformat(sensor.RGB565)
+sensor.set_framesize(sensor.QVGA)
+
+#sensor.set_windowing((224, 224))
+sensor.set_vflip(1)
+sensor.run(1)
+
+#setup LCD screen
+lcd.init()
+lcd.rotation(2)
+
 
 time.sleep(1)
 
@@ -86,7 +101,7 @@ while(True):
         time.sleep(3)
         corgi85.LINE_notifySticker_text("LINE_notifySticker_text", 1, 1)
         time.sleep(3)
-        img = 0
+        img = sensor.snapshot()
         corgi85.LINE_notifyPicture(img, "LINE_notifyPicture")
         time.sleep(3)
     else :
