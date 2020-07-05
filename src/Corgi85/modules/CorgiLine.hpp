@@ -63,7 +63,7 @@ public:
     }
     else if (func == "notifyPicture")
     {
-      pic_notify = getValue_from_string(cmd, ',', 2);
+      pic_notify = getValue_from_string(cmd, ',', 4);
     }
   };
 
