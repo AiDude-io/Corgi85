@@ -9,6 +9,8 @@
 class CorgiLine : public CorgiModule
 {
 public:
+  String pic_notify = "";
+
   void setup(){};
 
   void loop(){};
@@ -33,46 +35,62 @@ public:
   };
   void cmd(String cmd)
   {
-    Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
-    cmd.trim();
-    String func = getValue_from_string(cmd, ',', 1);
+    // Serial.printf("MODULE = %s\r\nCMD=%s\r\n", this->name(), cmd.c_str());
+    // cmd.trim();
+    // String func = getValue_from_string(cmd, ',', 1);
 
-    if (func == "setToken")
+    StringSplitter *splitter = new StringSplitter(cmd, ',', 6);
+
+    if (splitter->getItemCount() >= 2)
     {
-      String setToken = getValue_from_string(cmd, ',', 2);
-      LINE.setToken(setToken.c_str());
-      Serial.println(setToken);
+
+      String func = String(splitter->getItemAtIndex(1));
+      String v1 = String(splitter->getItemAtIndex(2));
+      String v2 = String(splitter->getItemAtIndex(3));
+      String v3 = String(splitter->getItemAtIndex(4));
+      String v4 = String(splitter->getItemAtIndex(5));
+      if (func == "setToken")
+      {
+        // String setToken = getValue_from_string(cmd, ',', 2);
+        LINE.setToken(v1.c_str());
+        Serial.println(v1.c_str());
+      }
+      else if (func == "notify")
+      {
+        // String notify = getValue_from_string(cmd, ',', 2);
+        Serial.println(LINE.notify(v1.c_str()));
+      }
+      else if (func == "notifySticker")
+      {
+        // int PackageIDn = getValue_from_string(cmd, ',', 2).toInt();
+        // int StickerIDn = getValue_from_string(cmd, ',', 3).toInt();
+        Serial.println(LINE.notifySticker(v1.toInt(), v2.toInt()));
+      }
+      else if (func == "notifySticker_text")
+      {
+        // String textn = getValue_from_string(cmd, ',', 2);
+        // int PackageIDn = getValue_from_string(cmd, ',', 3).toInt();
+        // int StickerIDn = getValue_from_string(cmd, ',', 4).toInt();
+        Serial.println(LINE.notifySticker(v1.c_str(), v2.toInt(), v3.toInt()));
+      }
+      else if (func == "notifyPicture")
+      {
+        // pic_notify = getValue_from_string(cmd, ',', 4);
+        pic_notify = String(v4);
+        LINE.notify(pic_notify.c_str());
+      }
     }
-    else if (func == "notify")
-    {
-      String notify = getValue_from_string(cmd, ',', 2);
-      Serial.println(LINE.notify(notify.c_str()));
-    }
-    else if (func == "notifySticker")
-    {
-      int PackageIDn = getValue_from_string(cmd, ',', 2).toInt();
-      int StickerIDn = getValue_from_string(cmd, ',', 3).toInt();
-      Serial.println(LINE.notifySticker(PackageIDn, StickerIDn));
-    }
-    else if (func == "notifySticker_text")
-    {
-      String textn = getValue_from_string(cmd, ',', 2);
-      int PackageIDn = getValue_from_string(cmd, ',', 3).toInt();
-      int StickerIDn = getValue_from_string(cmd, ',', 4).toInt();
-      Serial.println(LINE.notifySticker(textn.c_str(), PackageIDn, StickerIDn));
-    }
-    else if (func == "notifyPicture")
-    {
-      pic_notify = getValue_from_string(cmd, ',', 4);
-    }
+
+    delete splitter;
   };
 
-  void raw(String s, uint32_t data_length)
+  void raw(const String& s, uint32_t data_length)
   {
     size_t image_size = data_length;
     uint8_t *image_data = (uint8_t *)s.c_str();
+    LINE.notify(String(data_length).c_str());
     Serial.println(LINE.notifyPicture(pic_notify.c_str(), image_data, image_size));
-  }
+  };
 
   const char *name()
   {
@@ -81,7 +99,6 @@ public:
 
 protected:
 private:
-  String pic_notify = "";
 };
 
 #endif

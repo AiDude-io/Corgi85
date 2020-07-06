@@ -56,7 +56,7 @@ class CORGI85():
         self.uart.write(",\r")
 
     def LINE_notifyPicture(self, img, text):
-        img.compress([quality=80])
+        img.compress(quality=80)
         img_size = img.size()
         self.uart.write("\rLINE,notifyPicture,RAW_DATA,")
         self.uart.write(str(img_size))
@@ -65,7 +65,7 @@ class CORGI85():
         self.uart.write(",\r")
         self.uart.write(img.to_bytes())
 
-        
+
 
 
 #setup camera
@@ -87,7 +87,7 @@ time.sleep(1)
 corgi85 = CORGI85()
 
 
-corgi85.LINE_setToken()
+corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
 
 count = 0
 

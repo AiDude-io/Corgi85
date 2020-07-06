@@ -17,8 +17,9 @@ CORGI85 corgi85(&Serial);
 void setup()
 {
   // delay(2000);
+  // inputString.reserve(20000);
   Serial.begin(115200);
-
+  Serial.println("ESP8255 Starting");
   WiFiManager wifiManager;
   if (!wifiManager.autoConnect("Corgi_AutoConnect"))
   {
@@ -27,6 +28,8 @@ void setup()
     ESP.reset();
     delay(5000);
   }
+  Serial.println("WIFI Connected");
+
   corgi85.addModule(new CorgiIFTTT());
   corgi85.addModule(new CorgiLine());
   corgi85.addModule(new Corgi85_blynk());
@@ -34,11 +37,20 @@ void setup()
 
   corgi85.setup();
   // corgi85.printModulesList();
-  Serial.flush();
+  // Serial.flush();
+  Serial.println("Setup Finlish");
 }
-
+uint32_t count = 0;
 void loop()
 {
   corgi85.loop();
-  delay(20);
+  delay(1);
+  // if (WiFi.status() == WL_CONNECTED)
+  // {
+
+  //   inputString += "1";
+  //   count++;
+  //   Serial.println(count);
+  //   Serial.println(ESP.getFreeHeap(), DEC);
+  // }
 }

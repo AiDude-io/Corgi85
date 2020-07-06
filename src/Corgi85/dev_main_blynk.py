@@ -19,6 +19,10 @@ class CORGI85():
         self.uart.deinit()
         del self.uart
 
+    def reset(self):
+        self.uart.write("\rRESET,\r")
+
+
     def wifi_check(self):
 
         data = self.uart.read()

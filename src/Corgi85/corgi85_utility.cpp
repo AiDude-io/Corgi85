@@ -101,6 +101,7 @@ uint8_t CORGI85::loop(void) //new data was recevied
           data_length = (int32_t)String(splitter->getItemAtIndex(3)).toInt();
           current_mode = serial_raw;
           delete splitter;
+          _raw = "";
         }
 
         if (_data.indexOf("WIFI_CHECK") == 0)
@@ -113,6 +114,11 @@ uint8_t CORGI85::loop(void) //new data was recevied
           {
             Serial.print("0\r");
           }
+        }
+
+        if (_data.indexOf("RESET") == 0)
+        {
+          ESP.reset();
         }
         _data = "";
       }
@@ -128,7 +134,6 @@ uint8_t CORGI85::loop(void) //new data was recevied
         module->raw(_raw, data_length);
         current_mode = serial_string;
       }
-      _raw = "";
     }
     break;
     }
