@@ -43,7 +43,7 @@ class CORGI85():
         self.uart.write(",\r")
 
     def thingspeak_write_field(self, field, value):
-        print(">>> thingspeak_write_field")
+        print(">>> thingspeak_write_field, field : ",field,", value : ",value)
         self.uart.write("\rThingspeak,account_setup,")
         self.uart.write(str(field))
         self.uart.write(",")
