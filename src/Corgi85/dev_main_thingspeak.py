@@ -53,7 +53,7 @@ class CORGI85():
 time.sleep(1)
 
 corgi85 = CORGI85()
-bool ts_init = False
+ts_init = False
 
 while(True):
 
