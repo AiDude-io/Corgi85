@@ -86,7 +86,7 @@ class CORGI85():
         self.uart.write("\rBLYNK,8,")
         self.uart.write(str(VPIN))
         self.uart.write(",\r")
-        time.sleep_ms(100)
+        time.sleep_ms(10)
         data = self.uart.read()
 
         return data
