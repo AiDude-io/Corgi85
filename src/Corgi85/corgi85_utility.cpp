@@ -99,11 +99,10 @@ uint8_t CORGI85::loop(void) //new data was recevied
         {
           StringSplitter *splitter = new StringSplitter(_data, ',', 4);
           data_length = (uint32_t)String(splitter->getItemAtIndex(3)).toInt();
-          Serial.println(data_length);
-          Serial.println(data_length);
-          Serial.println(data_length);
           _raw_index = 0;
-          // _raw = (char *)malloc(data_length);
+          // if (_raw != 0)
+          //   free((void *)_raw);
+          _raw = (char *)malloc(data_length);
           current_mode = serial_raw;
           delete splitter;
           // _raw = "";
@@ -124,6 +123,7 @@ uint8_t CORGI85::loop(void) //new data was recevied
         if (_data.indexOf("RESET") == 0)
         {
           ESP.reset();
+          delay(1000);
         }
         _data = "";
       }
@@ -138,6 +138,8 @@ uint8_t CORGI85::loop(void) //new data was recevied
       {
         module->raw((char *)_raw, data_length);
         current_mode = serial_string;
+        if (_raw != 0)
+          free((void *)_raw);
       }
     }
     break;

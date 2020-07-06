@@ -40,10 +40,10 @@ private:
     uint8_t buffer_avaliable(void);
     CorgiModulesMap moduleList;
     uint32_t _raw_index = 0;
-    volatile char _raw[20000] = {0};
+    volatile char *_raw = 0;
     String _data = "";
     Receive_mode current_mode = serial_string;
-    int32_t data_length = 0;
+    uint32_t data_length = 0;
     CorgiModule *module;
 };
 

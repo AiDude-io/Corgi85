@@ -76,7 +76,7 @@ public:
       else if (func == "notifyPicture")
       {
         // pic_notify = getValue_from_string(cmd, ',', 4);
-        pic_notify = String(v4);
+        pic_notify = String(v3);
         // LINE.notify(pic_notify.c_str());
         Serial.println("in notifyPicture fn");
       }
@@ -85,7 +85,7 @@ public:
     delete splitter;
   };
 
-  void raw(char* s, uint32_t data_length)
+  void raw(char *s, uint32_t data_length)
   {
     Serial.println("in raw fn");
     size_t image_size = data_length;
