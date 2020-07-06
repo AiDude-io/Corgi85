@@ -9,7 +9,8 @@
 class CorgiThingSpeak : public CorgiModule
 {
 public:
-  void setup(){
+  void
+  setup(){
 
   };
 
@@ -55,13 +56,17 @@ public:
       String cmd_api_key = strTrim(cmd, ',', 2);
       String cmd_channel_id = strTrim(cmd, ',', 3);
 
-      char *api_key;
-      unsigned int size = 20;
-      cmd_api_key.toCharArray(api_key, size);
-
+      int str_api_len = cmd_api_key.length() + 1;
+      char buf_api_key[str_api_len];
+      cmd_api_key.toCharArray(buf_api_key, str_api_len);
       unsigned long channel_id = (unsigned long)cmd_channel_id.toInt();
 
-      ts_account(api_key, channel_id);
+      Serial.print("api key : ");
+      Serial.println(buf_api_key);
+      Serial.print("channel id : ");
+      Serial.println(channel_id);
+
+      ts_account(buf_api_key, channel_id);
     }
     else if (fn == "write_field")
     {
