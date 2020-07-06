@@ -40,15 +40,15 @@ class CORGI85():
         self.uart.write(str(api_key))
         self.uart.write(",")
         self.uart.write(str(channel_id))
-        self.uart.write(",\r")
+        self.uart.write("\r")
 
     def thingspeak_write_field(self, field, value):
-        print(">>> thingspeak_write_field")
-        self.uart.write("\rThingspeak,account_setup,")
+        print(">>> thingspeak_write_field, field : ",field,", value : ",value)
+        self.uart.write("\rThingspeak,write_field,")
         self.uart.write(str(field))
         self.uart.write(",")
         self.uart.write(str(value))
-        self.uart.write(",\r")
+        self.uart.write("\r")
 
 time.sleep(1)
 
