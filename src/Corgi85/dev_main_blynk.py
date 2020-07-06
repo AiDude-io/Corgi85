@@ -1,8 +1,12 @@
 
 
-import sensor, image, time, lcd
+import sensor
+import image
+import time
+import lcd
 from fpioa_manager import fm, board_info
 from machine import UART
+
 
 class CORGI85():
 
@@ -10,7 +14,8 @@ class CORGI85():
         try:
             fm.register(board_info.WIFI_RX, fm.fpioa.UART2_TX)
             fm.register(board_info.WIFI_TX, fm.fpioa.UART2_RX)
-            self.uart = UART (UART.UART2, 115200, 8, None, 1, timeout = 1000, read_buf_len = 4096)
+            self.uart = UART(UART.UART2, 115200, 8, None, 1,
+                             timeout=1000, read_buf_len=4096)
             print("Init CORGI85")
         except:
             print("Unable to init UART")
@@ -22,7 +27,6 @@ class CORGI85():
     def reset(self):
         self.uart.write("\rRESET,\r")
 
-
     def wifi_check(self):
 
         data = self.uart.read()
@@ -31,7 +35,6 @@ class CORGI85():
         data = self.uart.read()
 
         return int(data[0])
-
 
     def BLYNK_config(self):
         self.uart.write("\rBLYNK,0,\r")
@@ -88,6 +91,7 @@ class CORGI85():
 
         return data
 
+
 time.sleep(1)
 
 corgi85 = CORGI85()
@@ -108,14 +112,7 @@ while(True):
         corgi85.BLYNK_write_int(5, count)
         print(corgi85.BLYNK_read(6))
 
-    else :
+    else:
         print("WIFI Not Connected")
 
-
     time.sleep(5)
-
-
-
-
-
-

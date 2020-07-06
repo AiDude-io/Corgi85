@@ -77,19 +77,20 @@ public:
       {
         // pic_notify = getValue_from_string(cmd, ',', 4);
         pic_notify = String(v4);
-        LINE.notify(pic_notify.c_str());
+        // LINE.notify(pic_notify.c_str());
+        Serial.println("in notifyPicture fn");
       }
     }
 
     delete splitter;
   };
 
-  void raw(const String& s, uint32_t data_length)
+  void raw(char* s, uint32_t data_length)
   {
+    Serial.println("in raw fn");
     size_t image_size = data_length;
-    uint8_t *image_data = (uint8_t *)s.c_str();
-    LINE.notify(String(data_length).c_str());
-    Serial.println(LINE.notifyPicture(pic_notify.c_str(), image_data, image_size));
+    // LINE.notify(String(data_length).c_str());
+    Serial.println(LINE.notifyPicture(pic_notify.c_str(), (uint8_t *)s, image_size));
   };
 
   const char *name()

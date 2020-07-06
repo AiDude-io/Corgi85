@@ -18,6 +18,9 @@ class CORGI85():
         self.uart.deinit()
         del self.uart
 
+    def reset(self):
+        self.uart.write("\rRESET,\r")
+        
     def BLYNK_config(self):
         self.uart.write("BLYNK,0,\r")
 

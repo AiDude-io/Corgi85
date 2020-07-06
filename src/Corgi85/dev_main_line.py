@@ -23,11 +23,16 @@ class CORGI85():
 
         data = self.uart.read()
         self.uart.write("\rWIFI_CHECK,\r")
-        time.sleep_ms(100)
-        data = self.uart.read()
+        time.sleep_ms(10)
+        if(self.uart.any()>0):
+            data = self.uart.read()
+            return int(data[0])
+        else :
 
-        return int(data[0])
+            return 0
 
+    def reset(self):
+        self.uart.write("\rRESET,\r")
 
     def LINE_setToken(self, Token):
         self.uart.write("\rLINE,setToken,")
@@ -56,12 +61,12 @@ class CORGI85():
         self.uart.write(",\r")
 
     def LINE_notifyPicture(self, img, text):
-        img.compress(quality=80)
+        a = img.compress(quality=10)
         img_size = img.size()
         self.uart.write("\rLINE,notifyPicture,RAW_DATA,")
         self.uart.write(str(img_size))
         self.uart.write(",")
-        self.uart.write(str(text))
+        self.uart.write(text)
         self.uart.write(",\r")
         self.uart.write(img.to_bytes())
 
@@ -82,9 +87,21 @@ lcd.init()
 lcd.rotation(2)
 
 
+
 time.sleep(1)
 
 corgi85 = CORGI85()
+
+count = 0
+while(corgi85.wifi_check() == 0):
+    print(corgi85.uart.read())
+    print("WIFI Connecting")
+    time.sleep(1)
+    count = count +1;
+    if count == 10:
+        count = 0
+        corgi85.reset()
+        print("WIFI Reset")
 
 
 corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
@@ -92,23 +109,28 @@ corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
 count = 0
 
 while(True):
-
+    print(corgi85.wifi_check())
     if(corgi85.wifi_check()):
-
+        corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
         corgi85.LINE_notify("LINE_notify")
         time.sleep(3)
-        corgi85.LINE_notifyStickert(1, 1)
-        time.sleep(3)
-        corgi85.LINE_notifySticker_text("LINE_notifySticker_text", 1, 1)
-        time.sleep(3)
+        #corgi85.LINE_notifyStickert(1, 1)
+        #time.sleep(3)
+        #corgi85.LINE_notifySticker_text("LINE_notifySticker_text", 1, 1)
+        #time.sleep(3)
         img = sensor.snapshot()
         corgi85.LINE_notifyPicture(img, "LINE_notifyPicture")
         time.sleep(3)
     else :
+
         print("WIFI Not Connected")
 
+    print(corgi85.uart.read())
+    img = sensor.snapshot()
+    img.compress(quality=10)
+    img_size = img.size()
 
-    time.sleep(5)
+    time.sleep(10)
 
 
 

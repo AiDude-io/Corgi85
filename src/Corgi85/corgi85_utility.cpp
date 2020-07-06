@@ -73,7 +73,7 @@ uint8_t CORGI85::loop(void) //new data was recevied
 
   while (corgi_serial->available())
   {
-
+    yield();
     switch (current_mode)
     {
     case serial_string: // command // module name -------------\r
@@ -98,10 +98,15 @@ uint8_t CORGI85::loop(void) //new data was recevied
         if (_data.indexOf("RAW_DATA") != -1)
         {
           StringSplitter *splitter = new StringSplitter(_data, ',', 4);
-          data_length = (int32_t)String(splitter->getItemAtIndex(3)).toInt();
+          data_length = (uint32_t)String(splitter->getItemAtIndex(3)).toInt();
+          Serial.println(data_length);
+          Serial.println(data_length);
+          Serial.println(data_length);
+          _raw_index = 0;
+          // _raw = (char *)malloc(data_length);
           current_mode = serial_raw;
           delete splitter;
-          _raw = "";
+          // _raw = "";
         }
 
         if (_data.indexOf("WIFI_CHECK") == 0)
@@ -127,11 +132,11 @@ uint8_t CORGI85::loop(void) //new data was recevied
 
     case serial_raw:
     {
-      _raw += corgi_serial->read();
-      data_length--;
-      if (data_length <= 0)
+      _raw[_raw_index] = (char)corgi_serial->read();
+      _raw_index++;
+      if (_raw_index >= data_length)
       {
-        module->raw(_raw, data_length);
+        module->raw((char *)_raw, data_length);
         current_mode = serial_string;
       }
     }
