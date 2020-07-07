@@ -17,6 +17,7 @@ public:
     uint8_t initial = 0;
     uint8_t event = 0;
     float virtual_pin[32];
+    
     // uint8_t Blynk_virtualWrite_float(uint8_t vir_pin, int32_t value);
     // uint8_t Blynk_virtualWrite_string(uint8_t vir_pin, float value);
     // uint8_t Blynk_virtualWrite_long(uint8_t vir_pin, long unsigned int value);
