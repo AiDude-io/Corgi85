@@ -44,7 +44,7 @@ class CorgiIFTTT : public CorgiModule {
           http.end(); //Free the resources          
         }
       };
-      
+      delete splitter;
     }
 
 

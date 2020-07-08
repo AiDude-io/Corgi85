@@ -161,7 +161,29 @@ class CORGI85():
         self.uart.write(",")
         self.uart.write(str(value))
         self.uart.write("\r")
+        
+########################## IFTTT ##################################
+    def IFTTT_init(self, app, key):
+        self.ifttt_config['app'] = app
+        self.ifttt_config['key'] = key
 
+    def IFTTT_setParam(self, id, val):
+        self.ifttt_config[id] = val
+
+    def IFTTT_fire(self):
+        uri = ""
+        if self.ifttt_config[1]:
+            uri = uri + "&value1={}".format(self.ifttt_config[1])
+        if self.ifttt_config[2]:
+            uri = uri + "&value2={}".format(self.ifttt_config[2])
+        if self.ifttt_config[3]:
+            uri = uri + "&value3={}".format(self.ifttt_config[3])
+
+        url = "http://maker.ifttt.com/trigger/{}/with/key/{}?x=1".format(self.ifttt_config['app'], self.ifttt_config['key'])
+        url = url + uri
+        self.uart.write("\rIFTTT,fire,")
+        self.uart.write(url)
+        self.uart.write(",\r")
 
 global corgi85
 corgi85 = CORGI85()
