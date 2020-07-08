@@ -16,28 +16,39 @@ CORGI85 corgi85(&Serial);
 
 void setup()
 {
-  // delay(2000);
-
-  WiFiManager wifiManager;
-  if (!wifiManager.autoConnect("Corgi_AutoConnect"))
-  {
-    // Serial.println("failed to connect, we should reset as see if it connects");
-    delay(3000);
-    ESP.reset();
-    delay(5000);
-  }
-
-  int count = 0;
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    count++;
-    delay(500);
-    if (count >= 20)
-      ESP.reset();
-  }
 
   Serial.begin(115200);
   Serial.println("ESP8255 Starting");
+  WiFiManager wifiManager;
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    int count = 0;
+    int re_autoConnect = 0;
+
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      count++;
+      delay(500);
+      if (count >= 20)
+      {
+        re_autoConnect = 1;
+        break;
+      }
+    }
+
+    if (re_autoConnect)
+    {
+      if (!wifiManager.startConfigPortal("Corgi_AutoConnect"))
+      {
+        Serial.println("failed to connect and hit timeout");
+        delay(3000);
+        //reset and try again, or maybe put it to deep sleep
+        ESP.reset();
+        delay(5000);
+      }
+    }
+  }
   Serial.println("WIFI Connected");
 
   corgi85.addModule(new CorgiIFTTT());
@@ -55,12 +66,4 @@ void loop()
 {
   corgi85.loop();
   delay(1);
-  // if (WiFi.status() == WL_CONNECTED)
-  // {
-
-  //   inputString += "1";
-  //   count++;
-  //   Serial.println(count);
-  //   Serial.println(ESP.getFreeHeap(), DEC);
-  // }
 }

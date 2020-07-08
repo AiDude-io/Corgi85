@@ -1,6 +1,0 @@
-{
-    "board": "esp8266:esp8266:esp8285",
-    "configuration": "xtal=80,vt=flash,exception=legacy,ssl=all,ResetMethod=ck,CrystalFreq=40,eesz=1M64,led=2,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200",
-    "sketch": "Corgi85.ino",
-    "port": "COM16"
-}
