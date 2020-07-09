@@ -1,0 +1,22 @@
+name: Corgi85 Arduino CI
+
+on:
+  push:
+    branches:
+    - master
+    - release/*
+  pull_request:
+
+jobs: 
+  # PlatformIO on Windows, Ubuntu and Mac
+  build-pio:
+    name: PlatformIO for ${{ matrix.board }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest]
+        board: [esp8285]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build Corgi85
+      run: bash ./.github/scripts/on-push.sh ${{ matrix.board }} 1 1
