@@ -21,10 +21,8 @@ if [ "$BUILD_PIO" -eq 0 ]; then
 else
 	# PlatformIO Test
 	source ./.github/scripts/install-platformio.sh
-
-	python -m platformio lib --storage-dir "$GITHUB_WORKSPACE" install
-	find "$GITHUB_WORKSPACE"
+	export PLATFORMIO_CI_SRC="/Users/runner/work/Corgi85/Corgi85" 
+	python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
 	BOARD="esp8285"
-	# build_pio_sketch "$BOARD" "$GITHUB_WORKSPACE"
-	python -m platformio ci --board "$BOARD" "$GITHUB_WORKSPACE" 
+	platformio ci --lib="." --project-conf=./platformio.ini src/Corgi85 
 fi
