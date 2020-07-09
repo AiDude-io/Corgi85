@@ -1,21 +1,8 @@
-import sensor
-import image
 import time
-import lcd
 from fpioa_manager import fm, board_info
 from machine import UART
 
-# Boot to ESP8285 Mode
-_WIFI_BOOT_PIN = 17
-_WIFI_EN = 8
-fm.fpioa.set_function(_WIFI_BOOT_PIN,   FPIOA.GPIO6)
-fm.fpioa.set_function(_WIFI_EN,         FPIOA.GPIO5)
-_WIFI_BOOT = GPIO(GPIO.GPIO6, GPIO.OUT)
-_WIFI_EN = GPIO(GPIO.GPIO5, GPIO.OUT)
-
-
 class CORGI85():
-
     def __init__(self):
         try:
             fm.register(board_info.WIFI_RX, fm.fpioa.UART2_TX)
@@ -31,7 +18,6 @@ class CORGI85():
         del self.uart
 
     def wifi_check(self):
-
         data = self.uart.read()
         self.uart.write("\rWIFI_CHECK,\r")
         time.sleep_ms(10)
@@ -39,16 +25,12 @@ class CORGI85():
             data = self.uart.read()
             return int(data[0])
         else:
-
             return 0
 
     def reset(self):
-        _WIFI_BOOT.value(1)
-        _WIFI_EN.value(0)
-        time.sleep_ms(100)
-        _WIFI_EN.value(1)
+        self.uart.write("\rRESET,\r")
 
-############################# LINE ###############################
+############################# line ###############################
     def LINE_setToken(self, Token):
         self.uart.write("\rLINE,setToken,")
         self.uart.write(Token)
@@ -85,7 +67,7 @@ class CORGI85():
         self.uart.write(",\r")
         self.uart.write(img.to_bytes())
 
-########################## BLYNK ##################################
+########################## blynk ##################################
     def BLYNK_config(self):
         self.uart.write("\rBLYNK,0,\r")
 
@@ -140,13 +122,13 @@ class CORGI85():
         data = self.uart.read()
         return data
 
-########################## THINGSPEAK ##################################
+########################## blynk ##################################
 
-    def THINGSPEAK_init(self):
+    def Thingspeak_init(self):
         print(">>> thingspeak_init")
         self.uart.write("\rThingspeak,init\r")
 
-    def THINGSPEAK_account_setup(self, api_key, channel_id):
+    def Thingspeak_accountSetup(self, api_key, channel_id):
         print(">>> thingspeak_account_setup")
         self.uart.write("\rThingspeak,account_setup,")
         self.uart.write(str(api_key))
@@ -154,14 +136,13 @@ class CORGI85():
         self.uart.write(str(channel_id))
         self.uart.write("\r")
 
-    def THINGSPEAK_write_field(self, field, value):
+    def Thingspeak_writeField(self, field, value):
         print(">>> thingspeak_write_field, field : ", field, ", value : ", value)
         self.uart.write("\rThingspeak,write_field,")
         self.uart.write(str(field))
         self.uart.write(",")
         self.uart.write(str(value))
         self.uart.write("\r")
-        
 ########################## IFTTT ##################################
     def IFTTT_init(self, app, key):
         self.ifttt_config['app'] = app
@@ -184,6 +165,5 @@ class CORGI85():
         self.uart.write("\rIFTTT,fire,")
         self.uart.write(url)
         self.uart.write(",\r")
-
 global corgi85
 corgi85 = CORGI85()
