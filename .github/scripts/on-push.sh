@@ -26,5 +26,5 @@ else
 	find "$GITHUB_WORKSPACE"
 	BOARD="esp8285"
 	# build_pio_sketch "$BOARD" "$GITHUB_WORKSPACE"
-	python -m platformio ci -l '.' --board "$BOARD" "$GITHUB_WORKSPACE" 
+	python -m platformio ci --board "$BOARD" "$GITHUB_WORKSPACE" 
 fi
