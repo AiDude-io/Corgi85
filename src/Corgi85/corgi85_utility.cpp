@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "corgi85_utility.h"
-#include "StringSplitter.h" //https://github.com/aharshac/StringSplitter
+#include <StringSplitter.h> //https://github.com/aharshac/StringSplitter
 #include <ESP8266WiFi.h>
 
 CORGI85::CORGI85(HardwareSerial *Serial) //read the uart signal by hardware uart,such as D0
