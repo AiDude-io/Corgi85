@@ -26,7 +26,7 @@ else
 	mkdir -p $HOME/.pioenvs
 	export PLATFORMIO_ENVS_DIR=$HOME/.pioenvs
 	export PLATFORMIO_CI_SRC="/Users/runner/work/Corgi85/Corgi85"
-	python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
+	# python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
 	# platformio ci --lib="." --project-conf=./platformio.ini src/Corgi85
-	platformio ci -l '.' --build-dir="$HOME/.pioenvs" --keep-build-dir --board "$BOARD" "$GITHUB_WORKSPACE" 
+	platformio ci -l '.' --build-dir="$HOME/.pioenvs" --keep-build-dir --project-conf=./platformio.ini --board "$BOARD" src/Corgi85
 fi
