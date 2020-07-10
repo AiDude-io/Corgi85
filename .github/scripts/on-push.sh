@@ -21,8 +21,12 @@ if [ "$BUILD_PIO" -eq 0 ]; then
 else
 	# PlatformIO Test
 	source ./.github/scripts/install-platformio.sh
-	export PLATFORMIO_CI_SRC="/Users/runner/work/Corgi85/Corgi85" 
-	python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
+
 	BOARD="esp8285"
-	platformio ci --lib="." --project-conf=./platformio.ini src/Corgi85 
+	mkdir -p $HOME/.pioenvs
+	export PLATFORMIO_ENVS_DIR=$HOME/.pioenvs
+	export PLATFORMIO_CI_SRC="/Users/runner/work/Corgi85/Corgi85"
+	python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
+	# platformio ci --lib="." --project-conf=./platformio.ini src/Corgi85
+	platformio ci -l '.' --build-dir="$HOME/.pioenvs" --keep-build-dir --board "$BOARD" "$GITHUB_WORKSPACE" 
 fi
