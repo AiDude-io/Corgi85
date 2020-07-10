@@ -26,7 +26,10 @@ else
 	mkdir -p $HOME/.pioenvs
 	export PLATFORMIO_ENVS_DIR=$HOME/.pioenvs
 	export PLATFORMIO_CI_SRC="/Users/runner/work/Corgi85/Corgi85"
-	# python -m platformio lib --storage-dir "$PLATFORMIO_CI_SRC" install
-	# platformio ci --lib="." --project-conf=./platformio.ini src/Corgi85
 	platformio ci -l '.' --build-dir="$HOME/.pioenvs" --keep-build-dir --project-conf=./platformio.ini --board "$BOARD" src/Corgi85
+	# REVID=$(git rev-parse --short HEAD)
+	# echo "$HOME/fw$SSS.bin"
+	# cp -Rv /Users/runner/.pioenvs/.pio/build/esp32dev/firmware.bin "$HOME/fw$SSS.bin"
+	# cp -Rv /Users/runner/.pioenvs/.pio/build/esp32dev/firmware.bin "$HOME/fw.bin"
+	cp -Rv /Users/runner/.pioenvs/.pio/build/esp8285/firmware.bin "$HOME/fw.bin"
 fi
