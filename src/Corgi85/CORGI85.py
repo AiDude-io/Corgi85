@@ -23,7 +23,7 @@ class CORGI85():
         time.sleep_ms(10)
         if(self.uart.any() > 0):
             data = self.uart.read()
-            return int(data[0])
+            return int(data)
         else:
             return 0
 
