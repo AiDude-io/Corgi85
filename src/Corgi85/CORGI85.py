@@ -41,7 +41,7 @@ class CORGI85():
         self.uart.write(notify)
         self.uart.write(",\r")
 
-    def LINE_notifyStickert(self, PackageIDn, StickerIDn):
+    def LINE_notifySticker(self, PackageIDn, StickerIDn):
         self.uart.write("\rLINE,notifySticker,")
         self.uart.write(str(PackageIDn))
         self.uart.write(",")
