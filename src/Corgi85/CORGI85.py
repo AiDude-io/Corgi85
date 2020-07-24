@@ -145,6 +145,7 @@ class CORGI85():
         self.uart.write("\r")
 ########################## IFTTT ##################################
     def IFTTT_init(self, app, key):
+        self.ifttt_config = {}
         self.ifttt_config['app'] = app
         self.ifttt_config['key'] = key
 
