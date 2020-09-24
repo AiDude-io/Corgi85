@@ -112,11 +112,11 @@ uint8_t CORGI85::loop(void) //new data was recevied
         {
           if (WiFi.status() == WL_CONNECTED)
           {
-            Serial.print("1\r");
+            corgi_serial->print("1\r");
           }
           else
           {
-            Serial.print("0\r");
+            corgi_serial->print("0\r");
           }
         }
 
