@@ -1,84 +1,12 @@
-
-
 import sensor, image, time, lcd
-from fpioa_manager import fm, board_info
-from machine import UART
-
-class CORGI85():
-
-    def __init__(self):
-        try:
-            fm.register(board_info.WIFI_RX, fm.fpioa.UART2_TX)
-            fm.register(board_info.WIFI_TX, fm.fpioa.UART2_RX)
-            self.uart = UART (UART.UART2, 115200, 8, None, 1, timeout = 1000, read_buf_len = 4096)
-            print("Init CORGI85")
-        except:
-            print("Unable to init UART")
-
-    def deinit(self):
-        self.uart.deinit()
-        del self.uart
-
-    def wifi_check(self):
-
-        data = self.uart.read()
-        self.uart.write("\rWIFI_CHECK,\r")
-        time.sleep_ms(10)
-        if(self.uart.any()>0):
-            data = self.uart.read()
-            return int(data[0])
-        else :
-            return 0
-
-    def reset(self):
-        self.uart.write("\rRESET,\r")
-
-    def LINE_setToken(self, Token):
-        self.uart.write("\rLINE,setToken,")
-        self.uart.write(Token)
-        self.uart.write(",\r")
-
-    def LINE_notify(self, notify):
-        self.uart.write("\rLINE,notify,")
-        self.uart.write(notify)
-        self.uart.write(",\r")
-
-    def LINE_notifyStickert(self, PackageIDn, StickerIDn):
-        self.uart.write("\rLINE,notifySticker,")
-        self.uart.write(str(PackageIDn))
-        self.uart.write(",")
-        self.uart.write(str(StickerIDn))
-        self.uart.write(",\r")
-
-    def LINE_notifySticker_text(self, text, PackageIDn, StickerIDn):
-        self.uart.write("\rLINE,notifySticker_text,")
-        self.uart.write(str(text))
-        self.uart.write(",")
-        self.uart.write(str(PackageIDn))
-        self.uart.write(",")
-        self.uart.write(str(StickerIDn))
-        self.uart.write(",\r")
-
-    def LINE_notifyPicture(self, img, text = ""):
-        a = img.compress(quality=75)
-        img_size = img.size()
-        self.uart.write("\rLINE,notifyPicture,RAW_DATA,")
-        self.uart.write(str(img_size))
-        self.uart.write(",")
-        self.uart.write(text)
-        self.uart.write(",\r")
-        self.uart.write(img.to_bytes())
+from Corgi85 import corgi85
 
 
+token = "sqdSuyH9oidoRBZG5T72UdpYiMFcgeUEifAYTmSfdo8"
 
-
-
-
-
-
-
-
-
+#reset esp8285
+corgi85.reset()
+#print(dir(corgi85))
 
 #setup camera
 sensor.reset()
@@ -86,62 +14,92 @@ sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
 
 #sensor.set_windowing((224, 224))
-sensor.set_vflip(1)
+#sensor.set_vflip(1)
+#sensor.set_hmirror(0)
 sensor.run(1)
 
 #setup LCD screen
 lcd.init()
-lcd.rotation(2)
-
-
+lcd.rotation(0)
 
 time.sleep(1)
 
-corgi85 = CORGI85()
-
-
 count = 0
 while(corgi85.wifi_check() == 0):
-    print(corgi85.uart.read())
     print("WIFI Connecting")
     time.sleep(1)
-    count = count +1;
-    if count == 10:
-        count = 0
-        corgi85.reset()
-        print("WIFI Reset")
 
+print("\n\nWIFI Connected")
 
-#corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
+print("\n\nSet line Token:",token)
+corgi85.LINE_setToken(token)  #set line Token
 
-count = 0
+print("\n\nsend line image")
+img = sensor.snapshot() # camera capture image
+lcd.display(img)        # lcd  display image
+corgi85.LINE_notifyPicture(img, "CorgiDude LINE notify Picture")   # send image to line noti
+time.sleep(3)
 
-while(True):
-    print(corgi85.wifi_check())
-    if(corgi85.wifi_check()):
-        corgi85.LINE_setToken("X2fPDuFzSrEFq8C1cHVmk0TWflrGPjFZOVq22k1vQet")
-        #corgi85.LINE_notify("Hello From CorgiDude")
-        #time.sleep(3)
-        #corgi85.LINE_notifyStickert(1, 1)
-        #time.sleep(3)
-        #corgi85.LINE_notifySticker_text("LINE_notifySticker_text", 1, 1)
-        #time.sleep(3)
-        img = sensor.snapshot()
-        corgi85.LINE_notifyPicture(img, "LINE_notifyPicture")
-        time.sleep(15)
-    else :
+print("\n\nsend message to line noti: Hello From CorgiDude")
+corgi85.LINE_notify("Hello From CorgiDude")
+time.sleep(3)
 
-        print("WIFI Not Connected")
+print("\n\nsend line sticker")
+corgi85.LINE_notifySticker(1, 1)   # detail : https://devdocs.line.me/files/sticker_list.pdf
+time.sleep(3)
 
-    #print(corgi85.uart.read())
-    img = sensor.snapshot()
-    img.compress(quality=75)
-    img_size = img.size()
+print("\n\nsend line sticker & message")
+corgi85.LINE_notifySticker_text("Hello From CorgiDude", 1, 1) #detail :  https://devdocs.line.me/files/sticker_list.pdf
 
-    #time.sleep(10)
+##print("\n\n",dir(corgi85))
 
 
 
+## https://github.com/AiDude-io/CorgiDude/tree/master/08%20-%20Face%20Detection  << download kmodel
+#import sensor
+#import image
+#import lcd
+#import KPU as kpu
+#from Corgi85 import corgi85
+
+
+#while(corgi85.wifi_check() == 0):
+    #print("WIFI Connecting")
+    #time.sleep(1)
+
+#token = "sqdSuyH9oidoRBZG5T72UdpYiMFcgeUEifAYTmSfdo8"
+#corgi85.LINE_setToken(token)  #set line Token
+
+
+#lcd.init()
+#lcd.rotation(0)
+
+#sensor.reset()
+#sensor.set_pixformat(sensor.RGB565)
+#sensor.set_framesize(sensor.QVGA)
+#sensor.run(1)
+
+#task = kpu.load(0x300000)
+
+#anchor = (1.889, 2.5245, 2.9465, 3.94056, 3.99987, 5.3658, 5.155437, 6.92275, 6.718375, 9.01025)
+#a = kpu.init_yolo2(task, 0.5, 0.3, 5, anchor)
+
+#while(True):
+    #img = sensor.snapshot()
+
+    #faces = kpu.run_yolo2(task, img)
+
+    #if faces:
+        #for face in faces:
+            #img.draw_rectangle(face.rect(),color=(0,255,0),thickness=2)
+    #img = img.resize(240,240)
+    #lcd.display(img)
+
+    #if faces:
+        #img2 = sensor.snapshot()
+        #corgi85.LINE_notifyPicture(img2, "Detected some people")
+
+#kpu.deinit(task)
 
 
 
